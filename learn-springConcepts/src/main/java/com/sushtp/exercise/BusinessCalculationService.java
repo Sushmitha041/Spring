@@ -1,0 +1,36 @@
+package com.sushtp.exercise;
+
+import java.util.Arrays;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+@Service
+class BusinessCalculation {
+	DataService dataService;
+	@Autowired
+	public BusinessCalculation(DataService dataService) {
+		super();
+		this.dataService = dataService;
+	}
+
+	public int retrieveMax() {
+		return Arrays.stream(dataService.retrieveData()).max().orElse(0);
+	}
+}
+
+@Configuration
+@ComponentScan
+public class  BusinessCalculationService{
+	public static void main(String[] args) {
+
+		try (var context = new AnnotationConfigApplicationContext(BusinessCalculationService.class)) {
+			Arrays.stream(context.getBeanDefinitionNames()).forEach(System.out::println);
+			System.out.println(context.getBean(BusinessCalculation.class).retrieveMax()); 
+		}
+	}
+}
